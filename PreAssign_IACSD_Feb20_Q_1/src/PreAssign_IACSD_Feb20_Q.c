@@ -26,7 +26,7 @@ int main(void) {
 	getStringArray(string1, string, 20);
 	printf("\n Array Before Sorting : ");
 	printArray(string, len, 20);
-	//bubbleSort(string, len,20);
+	//bubbleSort(string, len,20); // Written program below
 	char temp[20];
 	int cmp;
 	for (int i = 0; i < len; i++) {
