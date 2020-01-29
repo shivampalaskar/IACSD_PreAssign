@@ -25,6 +25,8 @@ void addNodeAtGivenPos(int, int);
 int isEmpty();
 int getLength();
 int verifyPos(int);
+void delFirst();
+void delLast();
 void delAtPos(int);
 void displayNodes();
 int getData();
@@ -93,7 +95,6 @@ void swapNodes(){
 		delAtPos(i++);
 		addAtPos(temp,i++);
 		if(trav->nextPtr==NULL){
-			printf("\n NULL");
 			break;
 		}
 		else{
@@ -117,6 +118,21 @@ void addAtPos(NODE *temp, int pos) {
 		tempPtr->nextPtr = temp;
 	}
 	return;
+}
+
+void delFirst(){
+	head = head->nextPtr;
+}
+
+void delLast(){
+	if(getLength()==1)
+		head=NULL;
+	else {
+		struct Node* sndLastNode;
+		sndLastNode = get2ndLastNode();
+		printf("\n last node data : %d",sndLastNode->data);
+		sndLastNode->nextPtr = NULL;
+	}
 }
 
 void delAtPos(int pos) {
