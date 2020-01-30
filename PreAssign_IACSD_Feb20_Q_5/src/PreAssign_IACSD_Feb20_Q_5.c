@@ -42,7 +42,6 @@ void printNum(int num, int height) {
 			num = 1;
 			check = 0;
 		}
-
 	}
 }
 
