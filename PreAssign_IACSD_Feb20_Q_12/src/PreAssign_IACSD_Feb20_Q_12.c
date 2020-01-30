@@ -1,6 +1,6 @@
 /*
  ============================================================================
- Name        : PreAssign_IACSD_Feb20_Q_6.c
+ Name        : PreAssign_IACSD_Feb20_Q_12.c
  Author      : Shivam Palaskar
  Version     :
  Copyright   : Open source
@@ -14,7 +14,7 @@
 typedef struct Node {
 	int data;
 	struct Node *nextPtr;
-} NODE;
+}NODE;
 
 struct Node* createNode(int);
 void addNodeAtFirst(int);
@@ -36,20 +36,21 @@ void displayNodes();
 int getData();
 void swapNodes();
 void changeNodePos();
+void oddEvenSort();
 
 struct Node *head = NULL;
 
 int main(void) {
 	setvbuf(stdout, NULL, _IONBF, 0);
-	int choice, num, pos;
+	int choice, num,pos;
 	do {
 		printf("\nChose operation to perform : ");
 		printf("\n1) Add at First Position");
 		printf("\n2) Add at Last Position");
 		printf("\n3) Add at given Position");
 		printf("\n4) Display");
-		printf("\n5) Change Node Position");
-		printf("\n6) Exit");
+		printf("\n5) Odd - Even Position Sort");
+		printf("\n6))Exit");
 		printf("\n Enter Choice : ");
 		scanf("%d", &choice);
 		switch (choice) {
@@ -65,16 +66,16 @@ int main(void) {
 			break;
 		case 3:
 			printf("\n Enter Position Number : ");
-			scanf("%d", &pos);
+			scanf("%d",&pos);
 			if (verifyPos(pos)) {
 				num = getData();
-				addNodeAtGivenPos(num, pos);
+				addNodeAtGivenPos(num,pos);
 				printf("\n Added Successfully at %d Position", pos);
-			} else
+			}else
 				printf("\n Invalid Position");
 			break;
 		case 4:
-			if (isEmpty())
+			if(isEmpty())
 				printf("\nLinked List is Empty");
 			else
 				displayNodes();
@@ -82,9 +83,9 @@ int main(void) {
 		case 5:
 			if (isEmpty())
 				printf("\nLinked List is Empty");
-			else{
-				changeNodePos();
-				printf("\nPosition Changed Successfully");
+			else {
+				oddEvenSort();
+				printf("\n Successfully Sorted");
 			}
 			break;
 		}
@@ -92,43 +93,15 @@ int main(void) {
 	return EXIT_SUCCESS;
 }
 
-void changeNodePos(){
-	int pos;
-	NODE* node;
-	printf("\n Enter Node Position to change : ");
-	scanf("%d",&pos);
-	node = getNodeAtPos(pos);
-	delAtPos(pos);
-	printf("\n Enter New Position : ");
-	scanf("%d",&pos);
-	addAtPos(node,pos);
-}
-
-NODE* getNodeAtPos(int pos) {
-	struct Node* tempPtr;
-	tempPtr = head;
-	if (pos == 1)
-		return tempPtr;
-	while ((--pos) > 0) {  // this will give (position-1)th index
-		tempPtr = tempPtr->nextPtr;
-	}
-	return tempPtr;
-}
-
-void swapNodes(){
-	NODE* trav=head;
-	NODE* temp=head;
-	int i=1;
-	while(trav->nextPtr!=NULL){
-		temp = trav;
-		delAtPos(i++);
-		addAtPos(temp,i++);
-		if(trav->nextPtr==NULL){
-			break;
-		}
-		else{
-			trav = trav->nextPtr;
-		}
+void oddEvenSort() {
+	int pos = 1, diff = 0, length = getLength();
+	NODE* temp;
+	while (pos <= length) {
+		temp = getNodeAtPos(pos);
+		delAtPos(pos);
+		addAtPos(temp, (pos - diff));
+		pos = pos + 2;
+		diff++;
 	}
 }
 
@@ -145,12 +118,21 @@ void delLast(){
 		printf("\n last node data : %d",sndLastNode->data);
 		sndLastNode->nextPtr = NULL;
 	}
+	/*printf("\n &lastNode : %u",&lastNode);
+	printf("\n lastNode : %d",*lastNode);
+	printf("\n lastNode->data : %d",lastNode->data);
+	printf("\n lastNode->nextPtr : %u",lastNode->nextPtr);
+	lastNode--;
+	printf("\n &lastNode : %u",&lastNode);
+	printf("\n lastNode : %d",*lastNode);
+	printf("\n lastNode->data : %d",lastNode->data);
+	printf("\n lastNode->nextPtr : %u",lastNode->nextPtr);*/
 }
 
 void delAtPos(int pos) {
 	struct Node* tempPtr;
 	tempPtr = head;
-	if (pos == 1) {
+	if(pos==1){
 		delFirst();
 		return;
 	} else {
@@ -163,24 +145,24 @@ void delAtPos(int pos) {
 	}
 }
 
-int isEmpty() {
-	if (head == NULL)
+int isEmpty(){
+	if(head==NULL)
 		return 1;
 	else
 		return 0;
 }
 
-int getData() {
+int getData(){
 	int num;
 	printf("\n Enter Number : ");
-	scanf("%d", &num);
+	scanf("%d",&num);
 	return num;
 }
 
-struct Node* createNode(int num) {
-	struct Node *newNode = (struct Node*) malloc(sizeof(struct Node));
+struct Node* createNode(int num){
+	struct Node *newNode = (struct Node*)malloc(sizeof(struct Node));
 	newNode->data = num;
-	newNode->nextPtr = NULL;
+	newNode->nextPtr=NULL;
 	return newNode;
 }
 
@@ -208,13 +190,13 @@ void addAtFirst(NODE* temp) {
 	}
 }
 
-void addNodeAtLast(int num) {
+void addNodeAtLast(int num){
 	struct Node* newNode;
 	struct Node* tempPtr;
 	newNode = createNode(num);
-	if (head == NULL)
+	if(head == NULL)
 		head = newNode;
-	else {
+	else{
 		tempPtr = getLastNode();
 		tempPtr->nextPtr = newNode;
 	}
@@ -231,33 +213,30 @@ void addAtLast(NODE* temp) {
 	}
 }
 
-int verifyPos(int pos) {
-	if (pos > 0 && pos <= (getLength()+1))
+
+int verifyPos(int pos){
+	if (pos > 0 && pos <= getLength())
 		return 1;
 	else
 		return 0;
 }
 
-void addNodeAtGivenPos(int num, int pos) {
+void addNodeAtGivenPos(int num,int pos){
 	struct Node* newNode;
 	struct Node* tempPtr;
-	newNode = createNode(num);
+	newNode=createNode(num);
 	tempPtr = head;
-	if (pos == 1) {
-		addNodeAtFirst(num);
-		return;
-	}
-	if(pos == (getLength()+1)){
-		addNodeAtLast(num);
-		return;
-	}
-	while ((--pos) > 1) {  // this will give (position-1)th index
-		tempPtr = tempPtr->nextPtr;
-	}
-	if (pos == 1) {
-		newNode->nextPtr = tempPtr->nextPtr;
-		tempPtr->nextPtr = newNode;
-	}
+		if (pos == 1) {
+			addNodeAtFirst(num);
+			return;
+		}
+		while ((--pos) > 1) {  // this will give (position-1)th index
+			tempPtr = tempPtr->nextPtr;
+		}
+		if (pos == 1) {
+			newNode->nextPtr = tempPtr->nextPtr;
+			tempPtr->nextPtr = newNode;
+		}
 	return;
 }
 
@@ -283,9 +262,10 @@ void addAtPos(NODE *temp, int pos) {
 	return;
 }
 
+
 int getLength() {
 	struct Node* tempPtr = head;
-	int len = 0;
+	int len=0;
 	while (tempPtr != NULL) {
 		len++;
 		tempPtr = tempPtr->nextPtr;
@@ -293,32 +273,73 @@ int getLength() {
 	return len;
 }
 
-struct Node* getLastNode() {
+struct Node* getLastNode(){
 	struct Node* tempPtr;
-	tempPtr = head;
-	struct Node *lastNode = head;
-	while (tempPtr != NULL) {
+	tempPtr=head;
+	struct Node *lastNode=head;
+	while(tempPtr!=NULL){
 		lastNode = tempPtr;
 		tempPtr = tempPtr->nextPtr;
 	}
 	return lastNode;
 }
 
-struct Node* get2ndLastNode() {
-	struct Node* tempPtr = head;
-	struct Node *sndLastNode = head;
-	while ((tempPtr->nextPtr) != NULL) {
-		sndLastNode = tempPtr;
-		tempPtr = tempPtr->nextPtr;
-	}
+struct Node* get2ndLastNode(){
+	struct Node* tempPtr=head;
+	struct Node *sndLastNode=head;
+		while ((tempPtr->nextPtr) != NULL) {
+			sndLastNode = tempPtr;
+			tempPtr = tempPtr->nextPtr;
+		}
 	return sndLastNode;
 }
 
-void displayNodes() {
+NODE* getNodeAtPos(int pos) {
 	struct Node* tempPtr;
 	tempPtr = head;
-	while (tempPtr != NULL) {
-		printf("%d ", tempPtr->data);
+	if (pos == 1)
+		return tempPtr;
+	while ((--pos) > 0) {  // this will give (position-1)th index
+		tempPtr = tempPtr->nextPtr;
+	}
+	return tempPtr;
+}
+
+void displayNodes(){
+	struct Node* tempPtr;
+	tempPtr=head;
+	while(tempPtr!=NULL){
+		printf("%d ",tempPtr->data);
 		tempPtr = tempPtr->nextPtr;
 	}
 }
+
+void swapNodes(){
+	NODE* trav=head;
+	NODE* temp=head;
+	int i=1;
+	while(trav->nextPtr!=NULL){
+		temp = trav;
+		delAtPos(i++);
+		addAtPos(temp,i++);
+		if(trav->nextPtr==NULL){
+			break;
+		}
+		else{
+			trav = trav->nextPtr;
+		}
+	}
+}
+
+void changeNodePos(){
+	int pos;
+	NODE* node;
+	printf("\n Enter Node Position to change : ");
+	scanf("%d",&pos);
+	node = getNodeAtPos(pos);
+	delAtPos(pos);
+	printf("\n Enter New Position : ");
+	scanf("%d",&pos);
+	addAtPos(node,pos);
+}
+
